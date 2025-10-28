@@ -1,19 +1,35 @@
 // 1 Import the CSS file: This ensures that the styles are applied to the HTML elements.
 import "./style.css";
-import { addTodo, removeTodo, editTodo, todos } from "./state";
+import {
+    addTodo,
+    removeTodo,
+    editTodo,
+    todos,
+    setFilterStatus,
+    getFilteredTodos,
+    filterStatus,
+    FilterStatus,
+} from "./state";
 import {
     todoForm,
     todoInput,
     renderTodos,
     showInputError,
-    clearInput,
+    clearInputs,
     clearInputError,
     promptForEditText,
     initializeColorPicker,
+    updateFilterButtons,
+    filterAll,
+    filterActive,
+    filterCompleted,
+    dateInput,
 } from "./ui";
 
 const updateUI = (): void => {
-    renderTodos(handleRemove, handleEdit);
+    const filteredTodos = getFilteredTodos();
+    renderTodos(filteredTodos, handleRemove, handleEdit);
+    updateFilterButtons(filterStatus);
 };
 
 const handleRemove = (id: number): void => {
@@ -35,18 +51,27 @@ const handleEdit = (id: number): void => {
 const handleSubmit = (event: Event): void => {
     event.preventDefault(); // Prevent the default form submission behavior
     const text = todoInput.value.trim(); // Get the value of the input field and remove any leading or trailing whitespace
-
+    const dueDate = dateInput.value || null;
     if (text !== "") {
         clearInputError();
-        addTodo(text); // Add the todo item
-        clearInput(); // Clear the input field
+        addTodo(text, dueDate); // Add the todo item
+        clearInputs(); // Clear the input field
         updateUI();
     } else {
         showInputError();
     }
 };
 
+const handleFilter = (status: FilterStatus): void => {
+    setFilterStatus(status);
+    updateUI();
+};
+
 todoForm.addEventListener("submit", handleSubmit);
+
+filterAll.addEventListener("click", () => handleFilter("all"));
+filterActive.addEventListener("click", () => handleFilter("active"));
+filterCompleted.addEventListener("click", () => handleFilter("completed"));
 
 // Call the initializeColorPicker function when the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {

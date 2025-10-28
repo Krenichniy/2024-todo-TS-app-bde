@@ -1,6 +1,6 @@
 import { Todo } from "./interfaces";
 
-import { todos } from "./state";
+import { FilterStatus } from "./state";
 
 // Step 4: Get references to the HTML elements
 // Get references to the HTML elements: These references will be used to interact with the DOM
@@ -16,9 +16,33 @@ export const errorMessage = document.getElementById(
     "error-message"
 ) as HTMLParagraphElement; // Should be moved to the top + added to the HTML file
 
+export const dateInput = document.getElementById(
+    "date-input"
+) as HTMLInputElement; // date input element
+
+export const filterAll = document.getElementById(
+    "filter-all"
+) as HTMLButtonElement;
+export const filterActive = document.getElementById(
+    "filter-active"
+) as HTMLButtonElement;
+export const filterCompleted = document.getElementById(
+    "filter-completed"
+) as HTMLButtonElement;
+
+const isOverdue = (todo: Todo): boolean => {
+    if (!todo.dueDate || todo.completed) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to the start of the day
+    const dueDate = new Date(todo.dueDate);
+    return dueDate < today;
+};
+
 // Step 6: Function to render the list of todos
 // Function to render the list of todos: This function updates the DOM to display the current list of todos.
 export const renderTodos = (
+    todosToRender: Todo[],
     onRemove: (id: number) => void,
     onEdit: (id: number) => void
 ): void => {
@@ -27,13 +51,19 @@ export const renderTodos = (
     todoList.innerHTML = "";
 
     // Iterate over the todos array and create list items for each todo
-    todos.forEach((todo) => {
+    todosToRender.forEach((todo) => {
+        const isOverdueTodo = isOverdue(todo);
         // In this specific case, .forEach is more suitable because we are directly modifying the DOM for each todo item.
         const li = document.createElement("li");
-        li.className = "todo-item"; // Add a class to the list item
+        li.className = `todo-item ${isOverdueTodo ? "overdue" : ""}`; // Add a class to the list item
         // Use template literals to create the HTML content for each list item
         li.innerHTML = `
       <span>${todo.text}</span>
+      ${
+          todo.dueDate
+              ? `<span class="todo-date">Due: ${todo.dueDate}</span>`
+              : "-"
+      }
       <button>Remove</button>
          <button id="editBtn">Edit</button>
     `;
@@ -66,6 +96,12 @@ const addEditButtonListener = (
     editButton?.addEventListener("click", () => callback(id));
 };
 
+export const updateFilterButtons = (currentFilter: FilterStatus): void => {
+    filterAll.classList.toggle("active", currentFilter === "all");
+    filterActive.classList.toggle("active", currentFilter === "active");
+    filterCompleted.classList.toggle("active", currentFilter === "completed");
+};
+
 export const showInputError = (): void => {
     todoInput.classList.add("input-error"); // Add a class to highlight the error
     errorMessage.style.display = "block";
@@ -75,8 +111,9 @@ export const clearInputError = (): void => {
     errorMessage.style.display = "none";
 };
 
-export const clearInput = (): void => {
+export const clearInputs = (): void => {
     todoInput.value = ""; // Clear the input field
+    dateInput.value = "";
 };
 
 export const promptForEditText = (currentText: string): string | null => {
