@@ -162,3 +162,79 @@ document.addEventListener("DOMContentLoaded", () => {
 // Optional 16: Handle Errors:
 // Add error handling for user input validation. Show red text or border for invalid input.
 // Display error messages for invalid input.
+
+let num: number;
+let str: string;
+let bool: boolean;
+let empty: null;
+let notDefined: undefined;
+
+num = 3;
+
+const num1: number = 5;
+
+const numb2 = 45;
+
+function getSum(num1: number, num2: number): number {
+    return num1 + num2;
+}
+
+function getMilt(numb1 = 3, numb2 = 6) {
+    return numb1 * numb2;
+}
+
+let arr: number[];
+let arr2: string[];
+
+arr = [1, 2, 3, 4, 5];
+arr2 = ["a", "b", "c"];
+
+const arr3 = ["test1", "test2", 1]; //! type any
+
+let person: object;
+let country: {};
+
+const language: { name: string; code: string; symbolsCoutnt?: number } = {
+    name: "English",
+    code: "EN",
+    // symbolsCoutnt: 26,
+};
+type Person = {
+    name: string;
+    age: number;
+    isMarried?: boolean;
+};
+
+const person1: {
+    name: string;
+    age: number;
+    isMarried?: boolean;
+    relatives: Person[];
+    bankAccount: { id: number; type: string };
+} = {};
+
+//any
+let randomValue: any;
+randomValue = 10;
+randomValue = "Hello";
+randomValue = true;
+randomValue = {};
+
+let num5: number;
+
+num = randomValue; // Error
+//unknown
+let randomValue2: unknown;
+randomValue2 = 10;
+randomValue2 = "Hello";
+randomValue2 = true;
+randomValue2 = {};
+let num6: number;
+
+if (typeof randomValue2 === "number") num6 = randomValue2;
+
+//tuple
+let person2: [string, number, boolean];
+person2 = ["John", 30, true];
+
+person2.push(45); // works
