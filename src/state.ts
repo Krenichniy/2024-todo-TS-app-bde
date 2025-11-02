@@ -43,4 +43,4 @@ export const editTodo = (id: number, newText: string) => {
     }
 };
 
-JSON.stringify(todos); // '[{todo1}, {todo2}]'
+//add some code to todo list
