@@ -42,5 +42,3 @@ export const editTodo = (id: number, newText: string) => {
         todo.text = newText;
     }
 };
-
-JSON.stringify(todos); // '[{todo1}, {todo2}]'
