@@ -4,3 +4,5 @@ export interface Todo {
     completed: boolean;
     dueDate: string | null;
 }
+
+// add new interface
