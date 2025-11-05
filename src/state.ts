@@ -42,3 +42,5 @@ export const editTodo = (id: number, newText: string) => {
         todo.text = newText;
     }
 };
+
+//some commit
