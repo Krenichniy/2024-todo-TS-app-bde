@@ -18,7 +18,7 @@ export const getFilteredTodos = (): Todo[] => {
 // Step 5: Function to add a new todo
 // Function to add a new todo: This function creates a new todo object and adds it to the array.
 export const addTodo = (text: string, dueDate: string | null): void => {
-    const isCompleted = todos.length % 2 === 0 ? true : false; // Randomly set some todos as completed for testing purposes
+    // const isCompleted = todos.length % 2 === 0 ? true : false; // Randomly set some todos as completed for testing purposes
     const newTodo: Todo = {
         id: Date.now(), // Generate a unique ID based on the current timestamp
         text: text,
